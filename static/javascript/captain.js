@@ -38,9 +38,13 @@ function newTurn(){
             success: function(response){
                 var data = response.data;
                 colorList = response.colorList;
+                bkcolor = ["#003049", "#c1121f", "#edf2f4", "#000000"]
+                color = ["#ffffff", "#ffffff", "#000000", "#ffffff"]
                 for(var i = 0; i < 25; i++){
                     if(document.getElementById(i)){
                         document.getElementById(i).textContent = data[i];
+                        document.getElementById(i).style.backgroundColor = bkcolor[colorList[i]];
+                        document.getElementById(i).style.color = color[colorList[i]];
                     }
                     console.log(colorList[i]);
                 }
@@ -49,6 +53,7 @@ function newTurn(){
                 console.log(error);
             }
     })
+
 }
 
 
@@ -56,5 +61,21 @@ newTurn();
 
 
 function onButtonClick(button){
-    alert(button.textContent);
+    if(clicked[button.id])
+        return;
+    clicked[button.id] = 1;
+    if(colorList[button.id] == 1){
+        //red
+        button.style.backgroundColor = "#c1121f";
+        button.style.color = "#ffffff";
+    }else if(colorList[button.id] == 0){
+        //blue
+        button.style.backgroundColor = "#003049";
+        button.style.color = "#ffffff";
+    }else if(colorList[button.id] == 2){
+        button.style.backgroundColor = "#edf2f4";
+    }else{
+        button.style.backgroundColor = "#000000";
+        button.style.color = "#ffffff";
+    }
 }
