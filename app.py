@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 data = [""] * 25
 colorList = [2] * 25
-
+wordlists = []
 
 @app.route("/captain")
 def captain():
@@ -35,16 +35,44 @@ def setColor():
         colorList.append(2)
     random.shuffle(colorList)
 
-def setString():
+def setString(diff):
     global data
+    global wordlists
     data = []
+    if diff == "easy":
+        for i in range(25):
+            while True:
+                word = random.choice(wordlists[0])
+                if len(word) > 14:
+                    continue
+                if word not in data:
+                    data.append(word)
+                    break
+    if diff == "hard":
+        for i in range(25):
+            while True:
+                word = random.choice(wordlists[1])
+                if len(word) > 14:
+                    continue
+                if word not in data:
+                    data.append(word)
+                    break
+    if diff == "asia":
+        for i in range(25):
+            while True:
+                word = random.choice(wordlists[2])
+                if len(word) > 14:
+                    continue
+                if word not in data:
+                    data.append(word)
+                    break
     for i in range(25):
         data.append(str(i))
 
 @app.route("/createNewgame", methods = ["GET"])
 def newgame():
     setColor()
-    setString()
+    setString(request.args["difficulty"])
     return jsonify({})
 
 
@@ -57,4 +85,10 @@ def getData():
     return jsonify({"data": data, "colorList": colorList})
 
 if __name__ == "__main__":
+    with open("wordlist.txt", "rb") as f:
+        tmp = f.read().decode()
+        tmp = tmp.split("$")
+        for i in tmp:
+            wordlists.append(i.split())
     app.run(debug=True)
+    
